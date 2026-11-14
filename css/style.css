@@ -1,0 +1,718 @@
+/* ============================================================
+   Nawfal Ahmed Qadri — Portfolio Stylesheet
+   CSC-240 Final Project | Track 1
+
+   HOW THIS FILE IS ORGANIZED:
+     1. Design tokens (CSS custom properties / "variables")
+     2. Reset & base styles
+     3. Reusable pieces (container, buttons, section titles)
+     4. One block per page section (navbar, hero, about, ...)
+     5. Animations
+     6. Media queries (mobile responsiveness) at the bottom
+   ============================================================ */
+
+
+/* ------------------------------------------------------------
+   1. DESIGN TOKENS
+   CSS custom properties are declared once on :root (the <html>
+   element) and reused everywhere with var(--name). To switch to
+   dark mode, JavaScript sets  data-theme="dark"  on <html>, and
+   the second block below overrides the same variable names —
+   every color on the page updates instantly.
+   ------------------------------------------------------------ */
+:root {
+  /* Light theme (default) */
+  --bg: #f8f9fc;            /* page background */
+  --bg-card: #ffffff;       /* card / navbar background */
+  --text: #1c2333;          /* main text color */
+  --text-muted: #5a6478;    /* secondary, softer text */
+  --accent: #0d7a6f;        /* teal — links, buttons, highlights */
+  --accent-soft: #0d7a6f1a; /* same teal at ~10% opacity (hex alpha) */
+  --border: #e3e7ef;        /* subtle card borders */
+  --shadow: 0 8px 24px rgba(28, 35, 51, 0.08); /* soft card shadow */
+
+  /* Fonts (loaded from Google Fonts in index.html) */
+  --font-head: 'Space Grotesk', sans-serif;
+  --font-body: 'Inter', sans-serif;
+}
+
+/* Dark theme: ONLY the colors change — layout stays identical. */
+[data-theme="dark"] {
+  --bg: #0f1522;
+  --bg-card: #171f30;
+  --text: #e8ecf4;
+  --text-muted: #9aa5bd;
+  --accent: #2dd4bf;        /* brighter teal for dark backgrounds */
+  --accent-soft: #2dd4bf1f;
+  --border: #27314a;
+  --shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+
+/* ------------------------------------------------------------
+   2. RESET & BASE
+   ------------------------------------------------------------ */
+
+/* box-sizing: border-box makes width/height INCLUDE padding and
+   border — much easier to reason about. The *, ::before, ::after
+   selector applies it to every element on the page. */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  /* Makes anchor links (#projects etc.) glide instead of jump */
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--bg);
+  color: var(--text);
+  line-height: 1.7;                 /* comfortable reading spacing */
+  /* Smoothly animate colors when the theme toggles */
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-head);
+  line-height: 1.2;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;            /* remove default underline */
+}
+
+img {
+  max-width: 100%;                  /* images never overflow their box */
+}
+
+ul {
+  list-style: none;                 /* we style our own lists */
+}
+
+code {
+  background: var(--accent-soft);
+  padding: 0.1em 0.4em;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+
+/* ------------------------------------------------------------
+   3. REUSABLE PIECES
+   ------------------------------------------------------------ */
+
+/* .container centers content and caps its width on big screens.
+   The side padding is the "gutter" that keeps text off the screen
+   edge on phones. */
+.container {
+  max-width: 1080px;
+  margin: 0 auto;                   /* auto left/right = centered */
+  padding: 0 1.25rem;               /* 20px gutter on small screens */
+}
+
+.section {
+  padding: 5.5rem 0;                /* vertical breathing room */
+}
+
+/* Numbered section headings, e.g. "01. About Me" */
+.section-title {
+  font-size: clamp(1.6rem, 4vw, 2.2rem); /* scales with screen size */
+  margin-bottom: 2.5rem;
+}
+
+.section-title.centered {
+  text-align: center;
+}
+
+.section-number {
+  color: var(--accent);
+  font-size: 0.8em;
+  margin-right: 0.4rem;
+}
+
+/* Buttons — .btn is the shared base, the modifiers change colors */
+.btn {
+  display: inline-block;
+  padding: 0.8rem 1.6rem;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn:hover {
+  transform: translateY(-2px);      /* subtle "lift" on hover */
+  box-shadow: var(--shadow);
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #ffffff;
+}
+
+[data-theme="dark"] .btn-primary {
+  color: #0f1522;                   /* dark text reads better on bright teal */
+}
+
+.btn-outline {
+  border: 2px solid var(--accent);
+  color: var(--accent);
+}
+
+.btn-lg {
+  padding: 1rem 2.2rem;
+  font-size: 1.05rem;
+}
+
+/* Small icon-only buttons (theme toggle, hamburger) */
+.icon-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  padding: 0.4rem;
+  color: var(--text);
+}
+
+
+/* ------------------------------------------------------------
+   4a. NAVBAR
+   ------------------------------------------------------------ */
+.navbar {
+  position: fixed;                  /* stays put while the page scrolls */
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;                     /* draw above everything else */
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border);
+  transition: background-color 0.3s ease;
+}
+
+.navbar-inner {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0.9rem 1.25rem;
+  display: flex;                    /* logo left, links right */
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: 1.4rem;
+  color: var(--text);
+}
+
+.logo-dot {
+  color: var(--accent);
+}
+
+.nav-links {
+  display: flex;
+  gap: 1.75rem;                     /* space between links */
+  align-items: center;
+}
+
+.nav-links a {
+  color: var(--text);
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: color 0.2s ease;
+}
+
+.nav-links a:hover {
+  color: var(--accent);
+}
+
+/* The "Contact" link styled as a small pill button */
+.nav-cta {
+  background: var(--accent-soft);
+  color: var(--accent) !important;
+  padding: 0.45rem 1rem;
+  border-radius: 999px;
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Theme toggle: show only the icon for the mode you can SWITCH TO */
+.icon-moon { display: inline; }
+.icon-sun  { display: none; }
+
+[data-theme="dark"] .icon-moon { display: none; }
+[data-theme="dark"] .icon-sun  { display: inline; }
+
+/* Hamburger: hidden on desktop, shown in the mobile media query */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.hamburger .bar {
+  width: 22px;
+  height: 2px;
+  background: var(--text);
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* When JS adds .open, the 3 bars morph into an X */
+.hamburger.open .bar:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.hamburger.open .bar:nth-child(2) { opacity: 0; }
+.hamburger.open .bar:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+
+/* ------------------------------------------------------------
+   4b. HERO
+   ------------------------------------------------------------ */
+.hero {
+  min-height: 100vh;                /* fill the whole first screen */
+  display: flex;
+  align-items: center;
+  /* Soft radial glow behind the content, using the accent color */
+  background:
+    radial-gradient(ellipse 60% 50% at 70% 35%, var(--accent-soft), transparent),
+    var(--bg);
+  padding-top: 4rem;                /* clear the fixed navbar */
+}
+
+.hero-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.hero-eyebrow {
+  color: var(--accent);
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+.hero-title {
+  /* clamp(min, preferred, max): font scales smoothly with viewport
+     width but never gets too small or too big. */
+  font-size: clamp(2.2rem, 6vw, 3.8rem);
+  margin-bottom: 0.5rem;
+}
+
+.hero-subtitle {
+  font-size: clamp(1.2rem, 3.5vw, 1.8rem);
+  color: var(--text-muted);
+  margin-bottom: 1.25rem;
+  min-height: 1.3em;                /* reserve space while text types */
+}
+
+.accent {
+  color: var(--accent);
+}
+
+/* The blinking "|" cursor next to the typing effect */
+.cursor {
+  color: var(--accent);
+  animation: blink 1s step-end infinite;
+}
+
+.hero-blurb {
+  max-width: 540px;
+  color: var(--text-muted);
+  margin-bottom: 2rem;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;                  /* buttons stack if space runs out */
+}
+
+/* CSS-only initials avatar */
+.avatar-circle {
+  width: 230px;
+  height: 230px;
+  border-radius: 50%;               /* 50% radius = perfect circle */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-head);
+  font-size: 4rem;
+  font-weight: 700;
+  color: var(--accent);
+  background: var(--accent-soft);
+  border: 3px solid var(--accent);
+  box-shadow: var(--shadow);
+}
+
+
+/* ------------------------------------------------------------
+   4c. ABOUT
+   ------------------------------------------------------------ */
+.about-grid {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr; /* text wider than fact cards */
+  gap: 3rem;
+}
+
+.about-text p {
+  margin-bottom: 1.1rem;
+  color: var(--text-muted);
+}
+
+.about-facts {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.fact-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.fact-label {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.fact-value {
+  font-weight: 500;
+}
+
+
+/* ------------------------------------------------------------
+   4d. PROJECTS
+   ------------------------------------------------------------ */
+.projects-grid {
+  display: grid;
+  /* auto-fit + minmax = responsive grid with NO media query:
+     each card is at least 290px; the browser fits as many columns
+     as the row allows and wraps the rest. */
+  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+  gap: 1.5rem;
+}
+
+.project-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.project-card:hover {
+  transform: translateY(-6px);      /* card floats up on hover */
+  box-shadow: var(--shadow);
+}
+
+/* The "coming soon" card is slightly faded */
+.project-card-soon {
+  opacity: 0.75;
+  border-style: dashed;
+}
+
+.project-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.project-icon {
+  font-size: 2rem;
+}
+
+.project-link {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.project-name {
+  font-size: 1.25rem;
+  margin-bottom: 0.6rem;
+}
+
+.project-desc {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  flex-grow: 1;                     /* pushes the tags to the bottom */
+  margin-bottom: 1.25rem;
+}
+
+.project-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.project-tags li {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--accent);
+  background: var(--accent-soft);
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px;
+}
+
+
+/* ------------------------------------------------------------
+   4e. SKILLS
+   ------------------------------------------------------------ */
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+}
+
+.skill-group {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1.5rem 1.75rem;
+}
+
+.skill-group-title {
+  font-size: 1.05rem;
+  margin-bottom: 1rem;
+  color: var(--accent);
+}
+
+.chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.chip {
+  background: var(--accent-soft);
+  color: var(--text);
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+}
+
+
+/* ------------------------------------------------------------
+   4f. EXPERIENCE TIMELINE
+   ------------------------------------------------------------ */
+.timeline {
+  position: relative;               /* anchor for the ::before line */
+  max-width: 760px;
+  margin: 0 auto;
+  padding-left: 2rem;
+}
+
+/* The vertical line running down the left side */
+.timeline::before {
+  content: "";
+  position: absolute;
+  left: 6px;
+  top: 6px;
+  bottom: 6px;
+  width: 2px;
+  background: var(--border);
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+/* The teal dot marking each entry on the line */
+.timeline-item::before {
+  content: "";
+  position: absolute;
+  left: -2rem;                      /* pull back onto the line */
+  top: 1.6rem;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 3px solid var(--bg);
+}
+
+.timeline-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1.4rem 1.6rem;
+}
+
+.timeline-date {
+  font-size: 0.82rem;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.timeline-role {
+  font-size: 1.05rem;
+  margin: 0.35rem 0 0.5rem;
+}
+
+.timeline-card p {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+
+/* ------------------------------------------------------------
+   4g. CONTACT & FOOTER
+   ------------------------------------------------------------ */
+.contact-container {
+  text-align: center;
+  max-width: 640px;
+}
+
+.contact-blurb {
+  color: var(--text-muted);
+  margin-bottom: 2rem;
+}
+
+.contact-links {
+  margin-top: 1.75rem;
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  font-weight: 600;
+}
+
+.footer {
+  text-align: center;
+  padding: 2.5rem 1.25rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.footer-sub {
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+}
+
+
+/* ------------------------------------------------------------
+   5. ANIMATIONS
+   ------------------------------------------------------------ */
+
+/* Blinking cursor for the typing effect */
+@keyframes blink {
+  50% { opacity: 0; }               /* invisible for half of each second */
+}
+
+/* Scroll-reveal: sections start invisible & shifted down 30px.
+   When js/script.js sees a section enter the viewport it adds
+   .visible, which animates it to its natural position. */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+/* ------------------------------------------------------------
+   6. MEDIA QUERIES — MOBILE RESPONSIVENESS
+   Styles inside @media only apply when the screen is at most
+   768px wide (tablets & phones). Everything above is the
+   desktop layout; here we override just what needs to change.
+   ------------------------------------------------------------ */
+@media (max-width: 768px) {
+
+  /* Show the hamburger button on small screens */
+  .hamburger {
+    display: flex;
+  }
+
+  /* Turn the horizontal link row into a hidden dropdown panel.
+     JS toggles the .open class to slide it into view. */
+  .nav-links {
+    position: absolute;
+    top: 100%;                      /* directly below the navbar */
+    left: 0;
+    right: 0;
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+    flex-direction: column;         /* stack links vertically */
+    gap: 0;
+    max-height: 0;                  /* collapsed (hidden) */
+    overflow: hidden;
+    transition: max-height 0.35s ease;
+  }
+
+  .nav-links.open {
+    max-height: 320px;              /* expanded — enough for all links */
+  }
+
+  .nav-links li {
+    width: 100%;
+    text-align: center;
+  }
+
+  .nav-links a {
+    display: block;
+    padding: 0.9rem 0;
+  }
+
+  .nav-cta {
+    border-radius: 0;               /* pill shape looks odd full-width */
+    background: none;
+  }
+
+  /* Hero: stack text above the avatar instead of side-by-side */
+  .hero-inner {
+    flex-direction: column-reverse; /* avatar on top, text below */
+    text-align: center;
+    justify-content: center;
+    padding-top: 2rem;
+  }
+
+  .hero-buttons {
+    justify-content: center;
+  }
+
+  .hero-blurb {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .avatar-circle {
+    width: 150px;
+    height: 150px;
+    font-size: 2.6rem;
+  }
+
+  /* About: single column — fact cards drop below the text */
+  .about-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  /* Slightly tighter section spacing on phones */
+  .section {
+    padding: 3.5rem 0;
+  }
+}

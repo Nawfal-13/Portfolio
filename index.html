@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<!--
+  ============================================================
+  Nawfal Ahmed Qadri — Personal Portfolio
+  CSC-240 Final Project | Track 1: Static Website (HTML/CSS/JS)
+
+  FILE OVERVIEW:
+  This is the only HTML page of the site (a "single-page" layout).
+  The page is divided into <section> blocks (Hero, About, Projects,
+  Skills, Experience, Contact). The navigation bar links jump to
+  these sections using their id attributes (e.g. href="#projects"
+  scrolls to <section id="projects">).
+
+  Styling lives in  css/style.css
+  Behavior lives in js/script.js
+  ============================================================
+-->
+<html lang="en">
+
+<head>
+  <!-- charset tells the browser how to decode text (UTF-8 covers all characters) -->
+  <meta charset="UTF-8">
+
+  <!-- The viewport tag is REQUIRED for mobile responsiveness:
+       it tells phones to render the page at their real screen width
+       instead of pretending to be a 980px-wide desktop. -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Shows up in search results and when the link is shared -->
+  <meta name="description" content="Portfolio of Nawfal Ahmed Qadri — Computer Science & Math student at Union College.">
+
+  <title>Nawfal Ahmed Qadri | Portfolio</title>
+
+  <!-- Google Fonts: 'Space Grotesk' for headings, 'Inter' for body text.
+       preconnect speeds up the font download by opening the connection early. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Our own stylesheet (loaded last so it could override anything above) -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+  <!-- ======================================================
+       NAVIGATION BAR
+       Stays fixed at the top of the screen (see .navbar in CSS).
+       On small screens the links collapse behind a hamburger
+       button, which js/script.js opens and closes.
+       ====================================================== -->
+  <header class="navbar">
+    <nav class="navbar-inner">
+      <!-- Logo / wordmark: clicking it scrolls back to the top -->
+      <a href="#home" class="logo">NQ<span class="logo-dot">.</span></a>
+
+      <!-- The list of page links. The 'id' lets JavaScript find it. -->
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#about">About</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#experience">Experience</a></li>
+        <li><a href="#contact" class="nav-cta">Contact</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <!-- Dark/light mode switch. aria-label describes the button
+             for screen readers since it only contains an icon. -->
+        <button id="themeToggle" class="icon-btn" aria-label="Toggle dark mode">
+          <!-- Both icons are in the HTML; CSS shows one at a time
+               depending on the current theme. -->
+          <span class="icon-sun">☀️</span>
+          <span class="icon-moon">🌙</span>
+        </button>
+
+        <!-- Hamburger button: only visible on small screens (CSS media query).
+             The three <span> bars are drawn with CSS. -->
+        <button id="hamburger" class="icon-btn hamburger" aria-label="Open menu">
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- ======================================================
+         HERO SECTION — the first thing visitors see
+         ====================================================== -->
+    <section id="home" class="hero">
+      <div class="container hero-inner">
+        <div class="hero-text">
+          <p class="hero-eyebrow">Hi, my name is</p>
+          <h1 class="hero-title">Nawfal Ahmed Qadri<span class="accent">.</span></h1>
+          <!-- The typing effect in js/script.js writes into this element -->
+          <h2 class="hero-subtitle">I'm a <span id="typedText" class="accent"></span><span class="cursor">|</span></h2>
+          <p class="hero-blurb">
+            Computer Science &amp; Math student at Union College, building a
+            foundation in object-oriented programming, data structures, and
+            web development — one project at a time.
+          </p>
+          <div class="hero-buttons">
+            <a href="#projects" class="btn btn-primary">View My Work</a>
+            <a href="#contact" class="btn btn-outline">Get In Touch</a>
+          </div>
+        </div>
+
+        <!-- Simple initials "avatar" drawn with CSS (no photo needed) -->
+        <div class="hero-avatar" aria-hidden="true">
+          <div class="avatar-circle">NQ</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================
+         ABOUT SECTION
+         The class="reveal" sections fade in as you scroll —
+         handled by the IntersectionObserver in js/script.js.
+         ====================================================== -->
+    <section id="about" class="section reveal">
+      <div class="container">
+        <h2 class="section-title"><span class="section-number">01.</span> About Me</h2>
+        <div class="about-grid">
+          <div class="about-text">
+            <p>
+              I'm a Computer Science and Math student at Union College in
+              Schenectady, NY (Class of 2028), originally from Lahore, Pakistan.
+              I enjoy taking an idea apart to see how it works — whether that's
+              a poker hand-ranking algorithm or the layout of a webpage.
+            </p>
+            <p>
+              Outside the classroom, I've led community initiatives back home in
+              Pakistan — from plantation drives to financial-literacy outreach —
+              and at Union I represent the South Asian community through SOSA
+              and play on the club cricket team against schools like Princeton,
+              Colgate, and Tufts.
+            </p>
+            <p>
+              Right now I'm focused on strengthening my fundamentals in Java and
+              Python, and exploring front-end web development (this site is my
+              CSC-240 final project, hand-built with HTML, CSS, and JavaScript).
+            </p>
+          </div>
+          <div class="about-facts">
+            <!-- Quick-glance fact cards -->
+            <div class="fact-card">
+              <span class="fact-label">Education</span>
+              <span class="fact-value">Union College, B.S. Computer Science · GPA 3.7</span>
+            </div>
+            <div class="fact-card">
+              <span class="fact-label">Location</span>
+              <span class="fact-value">Schenectady, NY</span>
+            </div>
+            <div class="fact-card">
+              <span class="fact-label">Languages</span>
+              <span class="fact-value">English, Urdu, Hindi, Punjabi</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================
+         PROJECTS SECTION
+         Each project is a "card". Cards are laid out with CSS Grid
+         so they automatically wrap into 1 column on phones.
+         ====================================================== -->
+    <section id="projects" class="section reveal">
+      <div class="container">
+        <h2 class="section-title"><span class="section-number">02.</span> Projects</h2>
+
+        <div class="projects-grid">
+
+          <!-- Project 1: Poker simulator -->
+          <article class="project-card">
+            <div class="project-top">
+              <span class="project-icon">🃏</span>
+              <!-- target="_blank" opens the link in a new tab;
+                   rel="noopener" is a security best practice with it. -->
+              <a class="project-link" href="https://github.com/Nawfal-13/Stud-Poker-Texas-Hold-Em-JavaProject"
+                 target="_blank" rel="noopener" aria-label="GitHub repository">
+                GitHub ↗
+              </a>
+            </div>
+            <h3 class="project-name">Texas Hold'em Poker Simulator</h3>
+            <p class="project-desc">
+              A console-based Texas Hold'em–style poker game written entirely in
+              Java. Models cards, decks, and hands as objects; generates every
+              5-card combination from 7 cards and ranks them with a custom
+              <code>compareTo</code> algorithm to determine the winner.
+            </p>
+            <ul class="project-tags">
+              <li>Java</li>
+              <li>OOP</li>
+              <li>Data Structures</li>
+            </ul>
+          </article>
+
+          <!-- Project 2: this website -->
+          <article class="project-card">
+            <div class="project-top">
+              <span class="project-icon">💻</span>
+              <a class="project-link" href="https://github.com/Nawfal-13"
+                 target="_blank" rel="noopener" aria-label="GitHub profile">
+                GitHub ↗
+              </a>
+            </div>
+            <h3 class="project-name">Personal Portfolio Website</h3>
+            <p class="project-desc">
+              The site you're looking at — a fully responsive portfolio built
+              from scratch with semantic HTML, modern CSS (Grid, Flexbox,
+              custom properties), and vanilla JavaScript. Features a persistent
+              dark mode, scroll-reveal animations, and a mobile-first layout.
+              Deployed with GitHub Pages.
+            </p>
+            <ul class="project-tags">
+              <li>HTML</li>
+              <li>CSS</li>
+              <li>JavaScript</li>
+            </ul>
+          </article>
+
+          <!-- Project 3: placeholder for what's next -->
+          <article class="project-card project-card-soon">
+            <div class="project-top">
+              <span class="project-icon">🚧</span>
+            </div>
+            <h3 class="project-name">Next Up…</h3>
+            <p class="project-desc">
+              Currently exploring Python data projects and planning a web app
+              with a real database backend. Check back soon — or watch my
+              GitHub for new repositories.
+            </p>
+            <ul class="project-tags">
+              <li>Python</li>
+              <li>Coming Soon</li>
+            </ul>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================
+         SKILLS SECTION
+         ====================================================== -->
+    <section id="skills" class="section reveal">
+      <div class="container">
+        <h2 class="section-title"><span class="section-number">03.</span> Skills</h2>
+
+        <div class="skills-grid">
+          <div class="skill-group">
+            <h3 class="skill-group-title">Programming</h3>
+            <ul class="chip-list">
+              <li class="chip">Java</li>
+              <li class="chip">Python</li>
+              <li class="chip">HTML</li>
+              <li class="chip">CSS</li>
+              <li class="chip">JavaScript</li>
+            </ul>
+          </div>
+          <div class="skill-group">
+            <h3 class="skill-group-title">Concepts</h3>
+            <ul class="chip-list">
+              <li class="chip">Object-Oriented Programming</li>
+              <li class="chip">Data Structures</li>
+              <li class="chip">Responsive Web Design</li>
+              <li class="chip">Git &amp; GitHub</li>
+            </ul>
+          </div>
+          <div class="skill-group">
+            <h3 class="skill-group-title">Tools</h3>
+            <ul class="chip-list">
+              <li class="chip">VS Code</li>
+              <li class="chip">MS Excel</li>
+              <li class="chip">MS PowerPoint</li>
+              <li class="chip">Canva</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================
+         EXPERIENCE & LEADERSHIP SECTION
+         Built as a vertical timeline: each entry is a card with
+         a dot on a shared line (drawn with CSS ::before).
+         ====================================================== -->
+    <section id="experience" class="section reveal">
+      <div class="container">
+        <h2 class="section-title"><span class="section-number">04.</span> Experience &amp; Leadership</h2>
+
+        <div class="timeline">
+
+          <div class="timeline-item">
+            <div class="timeline-card">
+              <span class="timeline-date">Aug 2024 – Present · Schenectady, NY</span>
+              <h3 class="timeline-role">Freshman Representative · Students of South Asia (SOSA)</h3>
+              <p>
+                Served as liaison between the first-year class and the executive
+                board; led and organized performances for the Fall Show.
+              </p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-card">
+              <span class="timeline-date">Aug 2024 – Present · Schenectady, NY</span>
+              <h3 class="timeline-role">Playing XI · Union Club Cricket</h3>
+              <p>
+                Represent Union College in inter-university matches against
+                Princeton, Colgate, Tufts, and UAlbany.
+              </p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-card">
+              <span class="timeline-date">Jun 2023 – Aug 2023 · Lahore, Pakistan</span>
+              <h3 class="timeline-role">Business Operations Intern · Shaukat Khanum Memorial Cancer Hospital</h3>
+              <p>
+                Researched laboratory marketing and sales practices; compiled 60
+                patient portfolios and 150 fiscal reports while coordinating
+                across departments.
+              </p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-card">
+              <span class="timeline-date">Jun 2022 – Mar 2024 · Lahore, Pakistan</span>
+              <h3 class="timeline-role">Co-head, Sabza Wing · Manzil Parwaaz</h3>
+              <p>
+                Led plantation drives toward a more sustainable Pakistan and
+                worked to improve literacy rates in Lahore.
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================
+         CONTACT SECTION
+         ====================================================== -->
+    <section id="contact" class="section reveal">
+      <div class="container contact-container">
+        <h2 class="section-title centered"><span class="section-number">05.</span> Get In Touch</h2>
+        <p class="contact-blurb">
+          I'm always open to conversations about internships, projects, or
+          anything CS. My inbox is open — say salaam!
+        </p>
+        <!-- mailto: opens the visitor's email app with my address pre-filled -->
+        <a href="mailto:qadrin@union.edu" class="btn btn-primary btn-lg">qadrin@union.edu</a>
+
+        <div class="contact-links">
+          <a href="https://github.com/Nawfal-13" target="_blank" rel="noopener">GitHub</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ======================================================
+       FOOTER
+       The year is filled in automatically by js/script.js so
+       it never goes out of date.
+       ====================================================== -->
+  <footer class="footer">
+    <p>Designed &amp; built by Nawfal Ahmed Qadri · © <span id="year"></span></p>
+    <p class="footer-sub">CSC-240 Final Project · Union College</p>
+  </footer>
+
+  <!-- The script is loaded at the END of <body> so that all the HTML
+       elements above already exist when the JavaScript runs.
+       (If it were in <head>, document.getElementById(...) would return null.) -->
+  <script src="js/script.js"></script>
+</body>
+
+</html>
