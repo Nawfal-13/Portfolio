@@ -7,7 +7,7 @@ A fully responsive personal portfolio website built from scratch with
 semantic HTML, modern CSS, and vanilla JavaScript — no frameworks or
 build tools required.
 
-🔗 **Live site:** https://nawfal-13.github.io/portfolio/ *(update this link after deploying)*
+🔗 **Live site:** https://nawfal-13.github.io/portfolio/
 
 ---
 
