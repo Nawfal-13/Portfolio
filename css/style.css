@@ -621,14 +621,21 @@ code {
 
 /* Scroll-reveal: sections start invisible & shifted down 30px.
    When js/script.js sees a section enter the viewport it adds
-   .visible, which animates it to its natural position. */
-.reveal {
+   .visible, which animates it to its natural position.
+
+   PROGRESSIVE ENHANCEMENT: the selector is ".js .reveal", not just
+   ".reveal". The "js" class is added to <html> by the pre-paint
+   script in index.html — i.e., only when JavaScript is actually
+   running. If JS is disabled, the class is never added, this rule
+   never matches, and all content stays visible. (Bug fix: before
+   this, disabling JS left everything below the hero invisible.) */
+.js .reveal {
   opacity: 0;
   transform: translateY(30px);
   transition: opacity 0.7s ease, transform 0.7s ease;
 }
 
-.reveal.visible {
+.js .reveal.visible {
   opacity: 1;
   transform: translateY(0);
 }

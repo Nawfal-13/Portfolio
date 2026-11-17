@@ -28,13 +28,11 @@
 const themeToggle = document.getElementById("themeToggle");
 const htmlEl = document.documentElement; // the <html> element
 
-// On page load: restore the saved theme, if there is one.
-// localStorage.getItem returns null when the key doesn't exist,
-// so first-time visitors simply get the default (light) theme.
-const savedTheme = localStorage.getItem("theme");
-if (savedTheme === "dark") {
-  htmlEl.setAttribute("data-theme", "dark");
-}
+// NOTE: restoring the SAVED theme on page load no longer happens
+// here — it happens in the small inline script in index.html's
+// <head>, which runs before the first paint. Doing it here (after
+// the page had already been painted light) caused a visible flash
+// known as FOUC — Flash of Unstyled Content.
 
 // When the ☀️/🌙 button is clicked, flip the theme.
 themeToggle.addEventListener("click", () => {

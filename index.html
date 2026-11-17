@@ -39,6 +39,44 @@
 
   <!-- Our own stylesheet (loaded last so it could override anything above) -->
   <link rel="stylesheet" href="css/style.css">
+
+  <!-- ======================================================
+       PRE-PAINT SETUP SCRIPT
+       Unlike js/script.js (loaded at the END of <body>), this
+       tiny script runs BEFORE the browser paints the page.
+       It fixes two bugs:
+
+       1. FOUC (Flash of Unstyled Content): if the theme were
+          restored only in script.js, the browser would paint the
+          page in light colors first, then snap to dark — a
+          visible flash. Restoring the data-theme attribute HERE
+          means the very first paint already uses the right colors.
+
+       2. Progressive enhancement: the scroll-reveal effect hides
+          sections with CSS (opacity: 0) and relies on JavaScript
+          to show them. If JS is disabled, the page would stay
+          blank. So the CSS hiding rule is scoped to ".js .reveal",
+          and this script adds the "js" class — proof that JS is
+          actually running. No JS → no class → nothing ever hidden.
+
+       It's safe in <head> because it only touches
+       document.documentElement (the <html> tag), which always
+       exists — it never looks up elements that haven't loaded yet.
+       ====================================================== -->
+  <script>
+    // Mark that JavaScript is available (used by the .js .reveal CSS rule)
+    document.documentElement.classList.add("js");
+
+    // Restore the saved theme BEFORE first paint (prevents the flash).
+    // try/catch: localStorage can throw if the browser blocks site data.
+    try {
+      if (localStorage.getItem("theme") === "dark") {
+        document.documentElement.setAttribute("data-theme", "dark");
+      }
+    } catch (e) {
+      // Storage unavailable — just fall back to the default light theme.
+    }
+  </script>
 </head>
 
 <body>
@@ -351,7 +389,7 @@
         <h2 class="section-title centered"><span class="section-number">05.</span> Get In Touch</h2>
         <p class="contact-blurb">
           I'm always open to conversations about internships, projects, or
-          anything CS. My inbox is open — say salaam!
+          anything CS. My inbox is open, come say hi!
         </p>
         <!-- mailto: opens the visitor's email app with my address pre-filled -->
         <a href="mailto:qadrin@union.edu" class="btn btn-primary btn-lg">qadrin@union.edu</a>
